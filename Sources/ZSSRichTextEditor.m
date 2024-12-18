@@ -12,7 +12,7 @@
 #import "ZSSRichTextEditor.h"
 #import "ZSSBarButtonItem.h"
 #import "HRColorUtil.h"
-#import "ZSSTextView.h"
+
 
 @import JavaScriptCore;
 
@@ -107,15 +107,7 @@ static Class hackishFixClass = Nil;
  */
 @property (nonatomic, strong) NSString *htmlString;
 
-/*
- *  WKWebView for writing/editing/displaying the content
- */
-@property (nonatomic, strong) WKWebView *editorView;
 
-/*
- *  ZSSTextView for displaying the source code for what is displayed in the editor view
- */
-@property (nonatomic, strong) ZSSTextView *sourceView;
 
 /*
  *  CGRect for holding the frame for the editor view
@@ -251,8 +243,9 @@ static CGFloat kDefaultScale = 0.5;
     //Initialise variables
     self.editorLoaded = NO;
     self.receiveEditorDidChangeEvents = NO;
-    self.alwaysShowToolbar = NO;
+    self.alwaysShowToolbar = YES;
     self.shouldShowKeyboard = YES;
+    self.isFocusedTextView = NO;
     self.formatHTML = YES;
     
     //Initalise enabled toolbar items array
@@ -444,6 +437,13 @@ static CGFloat kDefaultScale = 0.5;
     self.toolbarHolder.autoresizingMask = self.toolbar.autoresizingMask;
     [self.toolbarHolder addSubview:self.toolBarScroll];
     [self.toolbarHolder insertSubview:backgroundToolbar atIndex:0];
+    
+    CGRect toolbarFrame = self.toolbarHolder.frame;
+    toolbarFrame.origin.y = 200 - self.toolbarHolder.frame.size.height;
+    self.toolbarHolder.frame = toolbarFrame;
+    
+    [self setFooterHeight:44];
+    [self setContentHeight:200 - self.toolbarHolder.frame.size.height];
     
 }
 
@@ -1053,6 +1053,15 @@ static CGFloat kDefaultScale = 0.5;
 
 #pragma mark - Editor Interaction
 
+- (void)setCursorPositionToEnd {
+    
+    NSString *js = [NSString stringWithFormat:@"zss_editor.setCursorPositionToEnd();"];
+    [self.editorView evaluateJavaScript:js completionHandler:^(NSString *result, NSError *error) {
+
+    }];
+
+}
+
 - (void)focusTextEditor {
     
     //TODO: Is this behavior correct? Is it the right replacement?
@@ -1061,7 +1070,7 @@ static CGFloat kDefaultScale = 0.5;
     
     NSString *js = [NSString stringWithFormat:@"zss_editor.focusEditor();"];
     [self.editorView evaluateJavaScript:js completionHandler:^(NSString *result, NSError *error) {
-     
+
     }];
 
 }
@@ -1069,7 +1078,7 @@ static CGFloat kDefaultScale = 0.5;
 - (void)blurTextEditor {
     NSString *js = [NSString stringWithFormat:@"zss_editor.blurEditor();"];
     [self.editorView evaluateJavaScript:js completionHandler:^(NSString *result, NSError *error) {
-     
+
     }];
 
 }
@@ -1091,10 +1100,8 @@ static CGFloat kDefaultScale = 0.5;
     NSString *cleanedHTML = [self removeQuotesFromHTML:self.sourceView.text];
     NSString *trigger = [NSString stringWithFormat:@"zss_editor.setHTML(\"%@\");", cleanedHTML];
     [self.editorView evaluateJavaScript:trigger completionHandler:^(NSString *result, NSError *error) {
-
+        
     }];
-
-    
 }
 
 - (void)getHTML:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler {
@@ -1893,7 +1900,6 @@ static CGFloat kDefaultScale = 0.5;
             [textView setContentOffset:offset];
         }];
     }
-    
 }
 
 
@@ -1968,11 +1974,20 @@ static CGFloat kDefaultScale = 0.5;
         
     } else if ([urlString rangeOfString:@"scroll://"].location != NSNotFound) {
         
-        NSInteger position = [[urlString stringByReplacingOccurrencesOfString:@"scroll://" withString:@""] integerValue];
-        [self editorDidScrollWithPosition:position];
-        
+        //NSInteger position = [[urlString stringByReplacingOccurrencesOfString:@"scroll://" withString:@""] integerValue];
+        //[self editorDidScrollWithPosition:position];
+    } else if ([urlString rangeOfString:@"focus://"].location != NSNotFound) {
+        // is in focus
+        if ([urlString hasSuffix:@"isActive"]) {
+            self.isFocusedTextView = YES;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"textViewFocusChanged" object:nil];
+        }
+        // is out of focus
+        else if ([urlString hasSuffix:@"isNotActive"]) {
+            self.isFocusedTextView = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"textViewFocusChanged" object:nil];
+        }
     }
-        
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
@@ -1980,8 +1995,9 @@ static CGFloat kDefaultScale = 0.5;
     
     if (!self.internalHTML) {
         self.internalHTML = @"";
+    } else {
+        [self updateHTML];
     }
-    [self updateHTML];
     
     if(self.placeholder) {
         [self setPlaceholderText];
@@ -2208,7 +2224,7 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification {
     // User Info
-    NSDictionary *info = notification.userInfo;
+    /*NSDictionary *info = notification.userInfo;
     CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     int curve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     CGRect keyboardEnd = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -2301,7 +2317,7 @@ static CGFloat kDefaultScale = 0.5;
             
         } completion:nil];
         
-    }
+    }*/
     
 }
 

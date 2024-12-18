@@ -39,38 +39,46 @@ zss_editor.updateScrollOffset = false;
 zss_editor.init = function() {
     
     $('#zss_editor_content').on('touchend', function(e) {
-                                zss_editor.enabledEditingItems(e);
-                                var clicked = $(e.target);
-                                if (!clicked.hasClass('zs_active')) {
-                                $('img').removeClass('zs_active');
-                                }
-                                });
+        zss_editor.enabledEditingItems(e);
+        var clicked = $(e.target);
+        if (!clicked.hasClass('zs_active')) {
+            $('img').removeClass('zs_active');
+        }
+    });
     
     $(document).on('selectionchange',function(e){
-                   zss_editor.calculateEditorHeightWithCaretPosition();
-                   zss_editor.setScrollPosition();
-                   zss_editor.enabledEditingItems(e);
-                   });
+        
+        zss_editor.calculateEditorHeightWithCaretPosition();
+        zss_editor.setScrollPosition();
+        zss_editor.enabledEditingItems(e);
+    });
     
     $(window).on('scroll', function(e) {
-                 zss_editor.updateOffset();
-                 });
+        zss_editor.updateOffset();
+    });
     
     // Make sure that when we tap anywhere in the document we focus on the editor
     $(window).on('touchmove', function(e) {
-                 zss_editor.isDragging = true;
-                 zss_editor.updateScrollOffset = true;
-                 zss_editor.setScrollPosition();
-                 zss_editor.enabledEditingItems(e);
-                 });
+        zss_editor.isDragging = true;
+        zss_editor.updateScrollOffset = true;
+        zss_editor.setScrollPosition();
+        zss_editor.enabledEditingItems(e);
+    });
     $(window).on('touchstart', function(e) {
-                 zss_editor.isDragging = false;
-                 });
+        zss_editor.isDragging = false;
+    });
     $(window).on('touchend', function(e) {
-                 if (!zss_editor.isDragging && (e.target.id == "zss_editor_footer"||e.target.nodeName.toLowerCase() == "html")) {
-                 zss_editor.focusEditor();
-                 }
-                 });
+        if (!zss_editor.isDragging) {
+            window.location = "focus://isActive";
+        }
+        if (!zss_editor.isDragging && (e.target.id == "zss_editor_footer"||e.target.nodeName.toLowerCase() == "html")) {
+            zss_editor.focusEditor();
+        }
+    });
+    
+    $(document).on('focusout', function(){
+        window.location = "focus://isNotActive";
+    });
     
 }//end
 
@@ -113,18 +121,15 @@ zss_editor.setPlaceholder = function(placeholder) {
     var editor = $('#zss_editor_content');
     
     //set placeHolder
-	editor.attr("placeholder",placeholder);
-	
-    //set focus			 
-	editor.focusout(function(){
-        var element = $(this);        
+    editor.attr("placeholder",placeholder);
+    
+    //set focus
+    editor.focusout(function(){
+        var element = $(this);
         if (!element.text().trim().length) {
             element.empty();
         }
     });
-	
-	
-    
 }
 
 zss_editor.setFooterHeight = function(footerHeight) {
@@ -162,8 +167,9 @@ zss_editor.calculateEditorHeightWithCaretPosition = function() {
     } else if (c > (offsetY + height - padding)) {
         newPos = c - height + padding - 18;
     }
-    
-    window.scrollTo(0, newPos);
+
+    //35625 nolu kayıt sebebiyle kapatıldı. -oozdemir
+    //window.scrollTo(0, newPos);
 }
 
 zss_editor.backuprange = function(){
@@ -328,24 +334,22 @@ zss_editor.setOutdent = function() {
 }
 
 zss_editor.setFontFamily = function(fontFamily) {
-
-	zss_editor.restorerange();
-	document.execCommand("styleWithCSS", null, true);
-	document.execCommand("fontName", false, fontFamily);
-	document.execCommand("styleWithCSS", null, false);
-	zss_editor.enabledEditingItems();
-		
+    
+    zss_editor.restorerange();
+    document.execCommand("styleWithCSS", null, true);
+    document.execCommand("fontName", false, fontFamily);
+    document.execCommand("styleWithCSS", null, false);
+    zss_editor.enabledEditingItems();
 }
 
 zss_editor.setTextColor = function(color) {
-		
+    
     zss_editor.restorerange();
     document.execCommand("styleWithCSS", null, true);
     document.execCommand('foreColor', false, color);
     document.execCommand("styleWithCSS", null, false);
     zss_editor.enabledEditingItems();
     // document.execCommand("removeFormat", false, "foreColor"); // Removes just foreColor
-	
 }
 
 zss_editor.setBackgroundColor = function(color) {
@@ -489,6 +493,31 @@ zss_editor.setHTML = function(html) {
     editor.html(html);
 }
 
+zss_editor.setCursorPositionToEnd = function() {
+    var editor = $('#zss_editor_content');
+    setCursorPositionToEnd(editor.get(0));
+}
+
+function setCursorPositionToEnd(contentEditableElement){
+    var range, selection;
+    //Firefox, Chrome, Opera, Safari, IE 9+
+    if(document.createRange){
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    }
+    //IE 8 and lower
+    else if(document.selection){
+        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection)
+    }
+}
+
 zss_editor.insertHTML = function(html) {
     document.execCommand('insertHTML', false, html);
     zss_editor.enabledEditingItems();
@@ -501,28 +530,28 @@ zss_editor.getHTML = function() {
     if (img.length != 0) {
         $('img').removeClass('zs_active');
         $('img').each(function(index, e) {
-                      var image = $(this);
-                      var zs_class = image.attr('class');
-                      if (typeof(zs_class) != "undefined") {
-                      if (zs_class == '') {
-                      image.removeAttr('class');
-                      }
-                      }
-                      });
+            var image = $(this);
+            var zs_class = image.attr('class');
+            if (typeof(zs_class) != "undefined") {
+                if (zs_class == '') {
+                    image.removeAttr('class');
+                }
+            }
+        });
     }
     
     // Blockquote
     var bq = $('blockquote');
     if (bq.length != 0) {
         bq.each(function() {
-                var b = $(this);
-                if (b.css('border').indexOf('none') != -1) {
+            var b = $(this);
+            if (b.css('border').indexOf('none') != -1) {
                 b.css({'border': ''});
-                }
-                if (b.css('padding').indexOf('0px') != -1) {
+            }
+            if (b.css('padding').indexOf('0px') != -1) {
                 b.css({'padding': ''});
-                }
-                });
+            }
+        });
     }
     
     // Get the contents
@@ -588,9 +617,9 @@ zss_editor.enabledEditingItems = function(e) {
     }
     // Images
     $('img').bind('touchstart', function(e) {
-                  $('img').removeClass('zs_active');
-                  $(this).addClass('zs_active');
-                  });
+        $('img').removeClass('zs_active');
+        $(this).addClass('zs_active');
+    });
     
     // Use jQuery to figure out those that are not supported
     if (typeof(e) != "undefined") {
@@ -610,13 +639,13 @@ zss_editor.enabledEditingItems = function(e) {
         if (textColor.length != 0 && textColor != 'rgba(0, 0, 0, 0)' && textColor != 'rgb(0, 0, 0)' && textColor != 'transparent') {
             items.push('textColor');
         }
-		
-		//Fonts
-		var font = t.css('font-family');
-		if (font.length != 0 && font != 'Arial, Helvetica, sans-serif') {
-			items.push('fonts');	
-		}
-		
+        
+        //Fonts
+        var font = t.css('font-family');
+        if (font.length != 0 && font != 'Arial, Helvetica, sans-serif') {
+            items.push('fonts');
+        }
+        
         // Link
         if (nodeName == 'a') {
             zss_editor.currentEditingLink = t;
@@ -661,7 +690,6 @@ zss_editor.enabledEditingItems = function(e) {
             console.log("callback://");
         }
     }
-    
 }
 
 zss_editor.focusEditor = function() {
@@ -688,14 +716,11 @@ zss_editor.setCustomCSS = function(customCSS) {
     
     //set focus
     /*editor.focusout(function(){
-                    var element = $(this);
-                    if (!element.text().trim().length) {
-                    element.empty();
-                    }
-                    });*/
-    
-    
-    
+     var element = $(this);
+     if (!element.text().trim().length) {
+     element.empty();
+     }
+     });*/
 }
 
 //end
