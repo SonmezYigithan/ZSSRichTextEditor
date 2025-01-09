@@ -10,51 +10,51 @@
 #import <WebKit/WebKit.h>
 #import "HRColorPickerViewController.h"
 #import "ZSSFontsViewController.h"
-
+#import "ZSSTextView.h"
 /**
  *  The types of toolbar items that can be added
  */
-static NSString * const ZSSRichTextEditorToolbarBold = @"com.zedsaid.toolbaritem.bold";
-static NSString * const ZSSRichTextEditorToolbarItalic = @"com.zedsaid.toolbaritem.italic";
-static NSString * const ZSSRichTextEditorToolbarSubscript = @"com.zedsaid.toolbaritem.subscript";
-static NSString * const ZSSRichTextEditorToolbarSuperscript = @"com.zedsaid.toolbaritem.superscript";
-static NSString * const ZSSRichTextEditorToolbarStrikeThrough = @"com.zedsaid.toolbaritem.strikeThrough";
-static NSString * const ZSSRichTextEditorToolbarUnderline = @"com.zedsaid.toolbaritem.underline";
-static NSString * const ZSSRichTextEditorToolbarRemoveFormat = @"com.zedsaid.toolbaritem.removeFormat";
-static NSString * const ZSSRichTextEditorToolbarJustifyLeft = @"com.zedsaid.toolbaritem.justifyLeft";
-static NSString * const ZSSRichTextEditorToolbarJustifyCenter = @"com.zedsaid.toolbaritem.justifyCenter";
-static NSString * const ZSSRichTextEditorToolbarJustifyRight = @"com.zedsaid.toolbaritem.justifyRight";
-static NSString * const ZSSRichTextEditorToolbarJustifyFull = @"com.zedsaid.toolbaritem.justifyFull";
-static NSString * const ZSSRichTextEditorToolbarH1 = @"com.zedsaid.toolbaritem.h1";
-static NSString * const ZSSRichTextEditorToolbarH2 = @"com.zedsaid.toolbaritem.h2";
-static NSString * const ZSSRichTextEditorToolbarH3 = @"com.zedsaid.toolbaritem.h3";
-static NSString * const ZSSRichTextEditorToolbarH4 = @"com.zedsaid.toolbaritem.h4";
-static NSString * const ZSSRichTextEditorToolbarH5 = @"com.zedsaid.toolbaritem.h5";
-static NSString * const ZSSRichTextEditorToolbarH6 = @"com.zedsaid.toolbaritem.h6";
-static NSString * const ZSSRichTextEditorToolbarTextColor = @"com.zedsaid.toolbaritem.textColor";
-static NSString * const ZSSRichTextEditorToolbarBackgroundColor = @"com.zedsaid.toolbaritem.backgroundColor";
-static NSString * const ZSSRichTextEditorToolbarUnorderedList = @"com.zedsaid.toolbaritem.unorderedList";
-static NSString * const ZSSRichTextEditorToolbarOrderedList = @"com.zedsaid.toolbaritem.orderedList";
-static NSString * const ZSSRichTextEditorToolbarHorizontalRule = @"com.zedsaid.toolbaritem.horizontalRule";
-static NSString * const ZSSRichTextEditorToolbarIndent = @"com.zedsaid.toolbaritem.indent";
-static NSString * const ZSSRichTextEditorToolbarOutdent = @"com.zedsaid.toolbaritem.outdent";
-static NSString * const ZSSRichTextEditorToolbarInsertImage = @"com.zedsaid.toolbaritem.insertImage";
-static NSString * const ZSSRichTextEditorToolbarInsertImageFromDevice = @"com.zedsaid.toolbaritem.insertImageFromDevice";
-static NSString * const ZSSRichTextEditorToolbarInsertLink = @"com.zedsaid.toolbaritem.insertLink";
-static NSString * const ZSSRichTextEditorToolbarRemoveLink = @"com.zedsaid.toolbaritem.removeLink";
-static NSString * const ZSSRichTextEditorToolbarQuickLink = @"com.zedsaid.toolbaritem.quickLink";
-static NSString * const ZSSRichTextEditorToolbarUndo = @"com.zedsaid.toolbaritem.undo";
-static NSString * const ZSSRichTextEditorToolbarRedo = @"com.zedsaid.toolbaritem.redo";
-static NSString * const ZSSRichTextEditorToolbarViewSource = @"com.zedsaid.toolbaritem.viewSource";
-static NSString * const ZSSRichTextEditorToolbarParagraph = @"com.zedsaid.toolbaritem.paragraph";
-static NSString * const ZSSRichTextEditorToolbarAll = @"com.zedsaid.toolbaritem.all";
-static NSString * const ZSSRichTextEditorToolbarNone = @"com.zedsaid.toolbaritem.none";
-static NSString * const ZSSRichTextEditorToolbarFonts = @"com.zedsaid.toolbaritem.fonts";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarBold = @"com.zedsaid.toolbaritem.bold";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarItalic = @"com.zedsaid.toolbaritem.italic";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarSubscript = @"com.zedsaid.toolbaritem.subscript";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarSuperscript = @"com.zedsaid.toolbaritem.superscript";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarStrikeThrough = @"com.zedsaid.toolbaritem.strikeThrough";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarUnderline = @"com.zedsaid.toolbaritem.underline";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarRemoveFormat = @"com.zedsaid.toolbaritem.removeFormat";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarJustifyLeft = @"com.zedsaid.toolbaritem.justifyLeft";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarJustifyCenter = @"com.zedsaid.toolbaritem.justifyCenter";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarJustifyRight = @"com.zedsaid.toolbaritem.justifyRight";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarJustifyFull = @"com.zedsaid.toolbaritem.justifyFull";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarH1 = @"com.zedsaid.toolbaritem.h1";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarH2 = @"com.zedsaid.toolbaritem.h2";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarH3 = @"com.zedsaid.toolbaritem.h3";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarH4 = @"com.zedsaid.toolbaritem.h4";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarH5 = @"com.zedsaid.toolbaritem.h5";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarH6 = @"com.zedsaid.toolbaritem.h6";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarTextColor = @"com.zedsaid.toolbaritem.textColor";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarBackgroundColor = @"com.zedsaid.toolbaritem.backgroundColor";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarUnorderedList = @"com.zedsaid.toolbaritem.unorderedList";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarOrderedList = @"com.zedsaid.toolbaritem.orderedList";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarHorizontalRule = @"com.zedsaid.toolbaritem.horizontalRule";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarIndent = @"com.zedsaid.toolbaritem.indent";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarOutdent = @"com.zedsaid.toolbaritem.outdent";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarInsertImage = @"com.zedsaid.toolbaritem.insertImage";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarInsertImageFromDevice = @"com.zedsaid.toolbaritem.insertImageFromDevice";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarInsertLink = @"com.zedsaid.toolbaritem.insertLink";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarRemoveLink = @"com.zedsaid.toolbaritem.removeLink";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarQuickLink = @"com.zedsaid.toolbaritem.quickLink";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarUndo = @"com.zedsaid.toolbaritem.undo";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarRedo = @"com.zedsaid.toolbaritem.redo";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarViewSource = @"com.zedsaid.toolbaritem.viewSource";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarParagraph = @"com.zedsaid.toolbaritem.paragraph";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarAll = @"com.zedsaid.toolbaritem.all";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarNone = @"com.zedsaid.toolbaritem.none";
+static NSString * _Null_unspecified const ZSSRichTextEditorToolbarFonts = @"com.zedsaid.toolbaritem.fonts";
 
 // source string for parsing JSON
-static NSString * const ZSSEditorHTML = @"zss_editor.getHTML();";
-static NSString * const ZSSEditorText = @"zss_editor.getText();";
-static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_editor_content'";
+static NSString * _Null_unspecified const ZSSEditorHTML = @"zss_editor.getHTML();";
+static NSString * _Null_unspecified const ZSSEditorText = @"zss_editor.getText();";
+static NSString * _Null_unspecified const ZSSEditorContent = @"document.activeElement.id=='zss_editor_content'";
 
 @class ZSSBarButtonItem;
 
@@ -64,10 +64,20 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
 @interface ZSSRichTextEditor : UIViewController <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, HRColorPickerViewControllerDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate,ZSSFontsViewControllerDelegate>
 
 
+/*
+ *  WKWebView for writing/editing/displaying the content
+ */
+@property (nonatomic, strong) WKWebView * _Null_unspecified editorView;
+
+/*
+ *  ZSSTextView for displaying the source code for what is displayed in the editor view
+ */
+@property (nonatomic, strong) ZSSTextView * _Null_unspecified sourceView;
+
 /**
  *  The base URL to use for the webView
  */
-@property (nonatomic, strong) NSURL *baseURL;
+@property (nonatomic, strong) NSURL * _Null_unspecified baseURL;
 
 /**
  *  If the HTML should be formatted to be pretty
@@ -78,6 +88,11 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  If the keyboard should be shown when the editor loads
  */
 @property (nonatomic) BOOL shouldShowKeyboard;
+
+/**
+ *  HTMLTextBox focus sorunu için eklendi
+ */
+@property (nonatomic) BOOL isFocusedTextView;
 
 /**
  * If the toolbar should always be shown or not
@@ -92,22 +107,25 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
 /**
  *  The placeholder text to use if there is no editor content
  */
-@property (nonatomic, strong) NSString *placeholder;
+@property (nonatomic, strong) NSString * _Null_unspecified placeholder;
 
 /**
  *  Toolbar items to include
  */
-@property (nonatomic, strong) NSArray *enabledToolbarItems;
+@property (nonatomic, strong) NSArray * _Null_unspecified enabledToolbarItems;
 
 /**
  *  Color to tint the toolbar items
  */
-@property (nonatomic, strong) UIColor *toolbarItemTintColor;
+@property (nonatomic, strong) UIColor * _Null_unspecified toolbarItemTintColor;
 
 /**
  *  Color to tint selected items
  */
-@property (nonatomic, strong) UIColor *toolbarItemSelectedTintColor;
+@property (nonatomic, strong) UIColor * _Null_unspecified toolbarItemSelectedTintColor;
+
+
+- (void) setCursorPositionToEnd;
 
 /**
  *  Sets the HTML for the entire editor
@@ -115,7 +133,7 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  @param html  HTML string to set for the editor
  *
  */
-- (void)setHTML:(NSString *)html;
+- (void)setHTML:(NSString  * _Null_unspecified)html;
 
 /**
  *  Returns the HTML from the Rich Text Editor
@@ -135,7 +153,7 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  @param html  HTML string to insert
  *
  */
-- (void)insertHTML:(NSString *)html;
+- (void)insertHTML:(NSString * _Null_unspecified)html;
 
 /**
  *  Manually focuses on the text editor
@@ -153,7 +171,7 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  @param url The URL for the image
  *  @param alt The alt for the image
  */
-- (void)showInsertImageDialogWithLink:(NSString *)url alt:(NSString *)alt;
+- (void)showInsertImageDialogWithLink:(NSString * _Null_unspecified)url alt:(NSString * _Null_unspecified)alt;
 
 /**
  *  Inserts an image
@@ -161,7 +179,7 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  @param url The URL for the image
  *  @param alt The alt attribute for the image
  */
-- (void)insertImage:(NSString *)url alt:(NSString *)alt;
+- (void)insertImage:(NSString * _Null_unspecified)url alt:(NSString * _Null_unspecified)alt;
 
 /**
  *  Shows the insert link dialog with optional inputs
@@ -169,7 +187,7 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  @param url   The URL for the link
  *  @param title The tile for the link
  */
-- (void)showInsertLinkDialogWithLink:(NSString *)url title:(NSString *)title;
+- (void)showInsertLinkDialogWithLink:(NSString * _Null_unspecified)url title:(NSString * _Null_unspecified)title;
 
 /**
  *  Inserts a link
@@ -177,7 +195,7 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
  *  @param url The URL for the link
  *  @param title The title for the link
  */
-- (void)insertLink:(NSString *)url title:(NSString *)title;
+- (void)insertLink:(NSString * _Null_unspecified)url title:(NSString * _Null_unspecified)title;
 
 /**
  *  Gets called when the insert URL picker button is tapped in an alertView
@@ -201,12 +219,12 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
 /**
  *  Add a custom UIBarButtonItem by using a UIButton
  */
-- (void)addCustomToolbarItemWithButton:(UIButton*)button;
+- (void)addCustomToolbarItemWithButton:(UIButton * _Null_unspecified)button;
 
 /**
  *  Add a custom ZSSBarButtonItem
  */
-- (void)addCustomToolbarItem:(ZSSBarButtonItem *)item;
+- (void)addCustomToolbarItem:(ZSSBarButtonItem * _Null_unspecified)item;
 
 /**
  *  Scroll event callback with position
@@ -216,21 +234,21 @@ static NSString * const ZSSEditorContent = @"document.activeElement.id=='zss_edi
 /**
  *  Text change callback with text and html
  */
-- (void)editorDidChangeWithText:(NSString *)text andHTML:(NSString *)html;
+- (void)editorDidChangeWithText:(NSString * _Null_unspecified)text andHTML:(NSString * _Null_unspecified)html;
 
 /**
  *  Hashtag callback with word
  */
-- (void)hashtagRecognizedWithWord:(NSString *)word;
+- (void)hashtagRecognizedWithWord:(NSString * _Null_unspecified)word;
 
 /**
  *  Mention callback with word
  */
-- (void)mentionRecognizedWithWord:(NSString *)word;
+- (void)mentionRecognizedWithWord:(NSString * _Null_unspecified)word;
 
 /**
  *  Set custom css
  */
-- (void)setCSS:(NSString *)css;
+- (void)setCSS:(NSString * _Null_unspecified)css;
 
 @end
