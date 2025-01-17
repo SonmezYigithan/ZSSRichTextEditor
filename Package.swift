@@ -16,9 +16,19 @@ let package = Package(
     targets: [
         .target(
             name: "ZSSRichTextEditor",
-            path: "Sources",
-            resources: [.process("Images")],
-            publicHeadersPath: "Include"
+            path: "Source",
+            sources: ["Core"],
+            resources: [
+                .process("Images"),
+                .process("editor/editor.html"),
+                .process("editor/jQuery.js"),
+                .process("editor/JSBeautifier.js"),
+                .process("editor/ZSSRichTextEditor.js")
+            ],
+            publicHeadersPath: "include/ZSSRichTextEditor",
+            cSettings: [
+                .headerSearchPath("Core")
+            ]
         )
     ]
 )
