@@ -63,7 +63,9 @@
 - (id)initWithColor:(UIColor*)defaultColor fullColor:(BOOL)fullColor saveStyle:(HCPCSaveStyle)saveStyle
 
 {
-    self = [super initWithNibName:nil bundle:nil];
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    self = [super initWithNibName:nil bundle:bundle];
     if (self) {
         _color = defaultColor;
         _fullColor = fullColor;

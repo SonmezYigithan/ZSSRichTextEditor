@@ -274,7 +274,8 @@ static CGFloat kDefaultScale = 0.5;
     
     //Hide Keyboard
     if (![self isIpad]) {
-        NSBundle* bundle = [NSBundle bundleForClass:[ZSSRichTextEditor class]];
+        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+        NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
         
         // Toolbar holder used to crop and position toolbar
         UIView *toolbarCropper = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width-44, 0, 44, 44)];
@@ -496,7 +497,8 @@ static CGFloat kDefaultScale = 0.5;
 - (void)loadResources {
     
     //Define correct bundle for loading resources
-    NSBundle* bundle = [NSBundle bundleForClass:[ZSSRichTextEditor class]];
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     
     //Create a string with the contents of editor.html
     NSString *filePath = [bundle pathForResource:@"editor" ofType:@"html"];
@@ -555,7 +557,8 @@ static CGFloat kDefaultScale = 0.5;
 - (NSArray *)itemsForToolbar {
     
     //Define correct bundle for loading resources
-    NSBundle* bundle = [NSBundle bundleForClass:[ZSSRichTextEditor class]];
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     
@@ -1496,10 +1499,13 @@ static CGFloat kDefaultScale = 0.5;
     // Insert Button Title
     NSString *insertButtonTitle = !self.selectedLinkURL ? NSLocalizedString(@"Insert", nil) : NSLocalizedString(@"Update", nil);
     
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    
     // Picker Button
     UIButton *am = [UIButton buttonWithType:UIButtonTypeCustom];
     am.frame = CGRectMake(0, 0, 25, 25);
-    [am setImage:[UIImage imageNamed:@"ZSSpicker.png" inBundle:[NSBundle bundleForClass:[ZSSRichTextEditor class]] compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
+    [am setImage:[UIImage imageNamed:@"ZSSpicker.png" inBundle: bundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [am addTarget:self action:@selector(showInsertURLAlternatePicker) forControlEvents:UIControlEventTouchUpInside];
     
     if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)]) {
@@ -1671,10 +1677,13 @@ static CGFloat kDefaultScale = 0.5;
     // Insert Button Title
     NSString *insertButtonTitle = !self.selectedImageURL ? NSLocalizedString(@"Insert", nil) : NSLocalizedString(@"Update", nil);
     
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    
     // Picker Button
     UIButton *am = [UIButton buttonWithType:UIButtonTypeCustom];
     am.frame = CGRectMake(0, 0, 25, 25);
-    [am setImage:[UIImage imageNamed:@"ZSSpicker.png" inBundle:[NSBundle bundleForClass:[ZSSRichTextEditor class]] compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
+    [am setImage:[UIImage imageNamed:@"ZSSpicker.png" inBundle: bundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [am addTarget:self action:@selector(showInsertImageAlternatePicker) forControlEvents:UIControlEventTouchUpInside];
     
     if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)]) {

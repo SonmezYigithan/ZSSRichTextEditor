@@ -26,8 +26,9 @@
 }
 
 - (id)initWithFontFamily:(ZSSFontFamily)fontFamily {
-
-    self = [super initWithNibName:nil bundle:nil];
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor_ZSSRichTextEditor" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    self = [super initWithNibName:nil bundle:bundle];
     if (self) {
         _font = fontFamily;
     }
